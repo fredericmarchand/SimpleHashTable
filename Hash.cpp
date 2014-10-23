@@ -8,11 +8,13 @@ using namespace std;
 
 Hash::Hash() 
 {
+    size = 0;
+
     for (int i = 0; i < tableSize; ++i)
     {
         hashTable[i] = new item;
-        hashTable[i]->name = "";
-        hashTable[i]->phone = "";
+        hashTable[i]->key = "";
+        hashTable[i]->value = "";
         hashTable[i]->next = NULL;
     }
 }
@@ -20,7 +22,7 @@ Hash::Hash()
 Hash::~Hash()
 {
     item *temp = NULL;
-
+    size = 0;
     for (int i = 0; i < tableSize; ++i)
     {
         item *ptr = hashTable[i];
@@ -34,25 +36,26 @@ Hash::~Hash()
     }
 }
 
-void Hash::addItem(string name, string phone)
+void Hash::addItem(string key, string value)
 {
-    int key = hash(name);
-    if (hashTable[key]->name == "")
+    int hashIndex = hash(key);
+    if (hashTable[hashIndex]->key == "")
     {
-        hashTable[key]->name = name;
-        hashTable[key]->phone = phone;
-        hashTable[key]->next = NULL;
+        ++size;
+        hashTable[hashIndex]->key = key;
+        hashTable[hashIndex]->value = value;
+        hashTable[hashIndex]->next = NULL;
     }
     else
     {
-        item *temp = hashTable[key];
+        item *temp = hashTable[hashIndex];
         while (temp->next != NULL)
         {
             temp = temp->next;
         }
         temp->next = new item;
-        temp->next->name = name;
-        temp->next->phone = phone;
+        temp->next->key = key;
+        temp->next->value = value;
         temp->next->next = NULL;
     }
 }
@@ -74,7 +77,7 @@ int Hash::itemCountAtIndex(int index)
 {
     int count = 0;
     item *ptr = hashTable[index];
-    if (hashTable[index]->name == "")
+    if (hashTable[index]->key == "")
     {
         return 0;
     }
@@ -88,3 +91,68 @@ int Hash::itemCountAtIndex(int index)
     }
     return count;
 }
+
+void Hash::clear()
+{
+    size = 0;
+    item *temp = NULL;
+
+    for (int i = 0; i < tableSize; ++i)
+    {
+        item *ptr = hashTable[i];
+        while (ptr->next != NULL)
+        {
+            temp = ptr;
+            ptr = ptr->next;
+            delete temp;
+        }
+        delete ptr;
+    }
+
+    for (int i = 0; i < tableSize; ++i)
+    {
+        hashTable[i] = new item;
+        hashTable[i]->key = "";
+        hashTable[i]->value = "";
+        hashTable[i]->next = NULL;
+    }
+}
+
+bool Hash::containsValue(string value)
+{
+
+}
+
+bool Hash::containsKey(string key)
+{
+
+}
+
+string Hash::getValue(string key)
+{
+    int index = hash(key);
+
+    if (hashTable[index]->key == "")
+    {
+        cerr << "Item does not exist" << endl;
+        return "";
+    }
+    else
+    {
+        item *ptr = hashTable[index];
+        while (ptr->next != NULL)
+        {
+            if (ptr->key == key)
+            {
+                return ptr->value;
+            }
+            ptr = ptr->next;
+        }
+    }
+}
+
+int Hash::getSize()
+{
+    return size;
+}
+

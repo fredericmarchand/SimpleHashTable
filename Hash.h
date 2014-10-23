@@ -12,16 +12,23 @@ class Hash {
 public:
     Hash();
     ~Hash();
-    void addItem(string name, string phone);
+    void addItem(string key, string value);
     int hash(string key);
     int itemCountAtIndex(int index);
+    void clear();
+    bool containsValue(string value);
+    bool containsKey(string key);
+    string getValue(string key);
+    int getSize();
+    void remove(string key);
 
 private:
     static const int tableSize = 1024;
+    int size;
 
     struct item {
-        string name;
-        string phone;
+        string key;
+        string value;
         item *next;
     };
 
