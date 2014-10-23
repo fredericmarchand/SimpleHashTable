@@ -30,6 +30,7 @@ Hash::~Hash()
             ptr = ptr->next;
             delete temp;
         }
+        delete ptr;
     }
 }
 
