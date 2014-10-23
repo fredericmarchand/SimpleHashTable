@@ -156,3 +156,8 @@ int Hash::getSize()
     return size;
 }
 
+void Hash::remove(string key)
+{
+
+}
+
